@@ -5,64 +5,24 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=chrome">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta charset="utf8">
-		<title>Pac-Man ✨</title>
-		<meta name="description" content="Pacman Game In javascript" >
-		<meta name="keywords" content="Pacman Game In javascript">
+		<title>Mac-Man ✨</title>
+		<meta name="description" content="Macman Game In javascript" >
+		<meta name="keywords" content="Macman Game In javascript">
 		<link rel="shortcut icon" href="favicon.png">
-		<style>
-			*{padding:0;margin:0;}
-			.wrapper{
-				width: 960px;
-				margin:0 auto;
-				color:#999;
-			}
-			canvas{display:block;background: #000;}
-			.info{
-				line-height: 30px;
-				text-align: center;
-				margin-bottom: 10px;
-			}
-			p{
-				line-height: 24px;
-				text-indent: 2em;
-				font-size: 14px;
-			}
-			.mod-botton{
-				height: 32px;
-				padding: 15px 0;
-				text-align: center;
-			}
-		</style>
-		<script type="text/javascript">
-			setTimeout(function(){
-				if(location.hostname.indexOf('passer-by.com')<0){
-					location.href = 'https://macman.netlify.app/';
-				}else if( window.top != window.self ) {
-				    window.top.location = self.location.href;
-				}
-			},parseInt(3000+15000*Math.random()));
-		</script>
+		<link rel="stylesheet" href="./style.css">
+
+		
 	</head>
 	<body>
 		<div class="wrapper">
-			<canvas id="canvas" width="960" height="640">不支持画布</canvas>
-			<div class="info">按［空格］暂停或继续</div>
-
-			<p>The development of this Pac-Man game is my attempt to learn and explore HTML5 games,
-
-				and it is also a tribute to this classic arcade game. The game roughly restores the 
-	
-				appearance of Pac-Man in my impression. While transplanting levels and rules of gameplay, 
-	
-				the game character animation management and ghost intelligent addressing algorithms are added 
-	
-				to the game, which realizes the enclosure of the player by ghosts. I hope to share some of my thoughts 
-	
-				on game development with you through the game and code.</p>		
+			<div class="info"></div>
+			<img src="./Macman.png" alt="">	
+			<canvas id="canvas" width="960" height="640">Canvas is not supported</canvas>
+			
 
 	 <div class="mod-botton">
 				<a class="github-button" href="https://github.com/shuence" data-style="mega" data-count-href="/shuence/followers" data-count-api="/users/shuence#followers" data-count-aria-label="# followers on GitHub" aria-label="Follow @shuence on GitHub">Follow @shuence</a>
-				<a class="github-button" href="https://github.com/shuence/Pacman" data-style="mega" data-count-href="/shuence/pacman/stargazers" data-count-api="/repos/shuence/pacman#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star shuence/pacman on GitHub">Star</a>
+				<a class="github-button" href="https://github.com/shuence/Pacman" data-style="mega" data-count-href="/shuence/Pacman/stargazers" data-count-api="/repos/shuence/Pacman#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star shuence/Pacman on GitHub">Star</a>
 	</div>
 		</div>
 		<script src="game.js"></script>
