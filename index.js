@@ -537,7 +537,7 @@
 				context.fill();
 			}
 		});
-		//游戏名
+
 		stage.createItem({
 			x:game.width/2,
 			y:game.height*.6,
@@ -549,7 +549,7 @@
 				context.fillText('Pac-Man',this.x,this.y);
 			}
 		});
-		//版权信息
+
 		stage.createItem({
 			x:game.width-12,
 			y:game.height-5,
@@ -561,7 +561,6 @@
 				context.fillText('© Shuence ✨',this.x,this.y);
 			}
 		});
-		//事件绑定
 		stage.bind('keydown',function(e){
 			switch(e.keyCode){
 				case 13:
@@ -571,19 +570,19 @@
 			}
 		});
 	})();
-	//游戏主程序
+
 	(function(){
 		_COIGIG.forEach(function(config,index){
 			var stage,map,beans,items,player;
 			stage = game.createStage({
 				update:function(){
 					var stage = this;
-					if(stage.status==1){								//场景正常运行
+					if(stage.status==1){								
 						items.forEach(function(item){
 							if(map&&!map.get(item.coord.x,item.coord.y)&&!map.get(player.coord.x,player.coord.y)){
 								var dx = item.x-player.x;
 								var dy = item.y-player.y;
-								if(dx*dx+dy*dy<750&&item.status!=4){		//物体检测
+								if(dx*dx+dy*dy<750&&item.status!=4){		
 									if(item.status==3){
 										item.status = 4;
 										_SCORE += 10;
@@ -594,10 +593,10 @@
 								}
 							}
 						});
-						if(JSON.stringify(beans.data).indexOf(0)<0){	//当没有物品的时候，进入下一关
+						if(JSON.stringify(beans.data).indexOf(0)<0){	
 							game.nextStage();
 						}
-					}else if(stage.status==3){		//场景临时状态
+					}else if(stage.status==3){		
 						if(!stage.timeout){
 							_LIFE--;
 							if(_LIFE){
@@ -611,7 +610,7 @@
 					}
 				}
 			});
-			//绘制地图
+			
 			map = stage.createMap({
 				x:60,
 				y:10,
@@ -682,7 +681,8 @@
 					}
 				}
 			});
-			//物品地图
+			
+
 			beans = stage.createMap({
 				x:60,
 				y:10,
@@ -707,7 +707,8 @@
 					}
 				}
 			});
-			//关卡得分
+			
+
 			stage.createItem({
 				x:690,
 				y:80,
@@ -715,7 +716,7 @@
 					context.font = 'bold 26px Helvetica';
 					context.textAlign = 'left';
 					context.textBaseline = 'bottom';
-					context.fillStyle = '#C33';
+					context.fillStyle = '#CFF';
 					context.fillText('SCORE',this.x,this.y);
 					context.font = '26px Helvetica';
 					context.textAlign = 'left';
@@ -725,7 +726,7 @@
 					context.font = 'bold 26px Helvetica';
 					context.textAlign = 'left';
 					context.textBaseline = 'bottom';
-					context.fillStyle = '#C33';
+					context.fillStyle = '#CFF';
 					context.fillText('LEVEL',this.x,this.y+72);
 					context.font = '26px Helvetica';
 					context.textAlign = 'left';
@@ -792,13 +793,13 @@
 						if(this.status==3&&!this.timeout){
 							this.status = 1;
 						}
-						if(!this.coord.offset){			//到达坐标中心时计算
+						if(!this.coord.offset){			
 							if(this.status==1){
-								if(!this.timeout){		//定时器
+								if(!this.timeout){		
 									new_map = JSON.parse(JSON.stringify(map.data).replace(/2/g,0));
 									var id = this._id;
 									items.forEach(function(item){
-										if(item._id!=id&&item.status==1){	//NPC将其它所有还处于正常状态的NPC当成一堵墙
+										if(item._id!=id&&item.status==1){	
 											new_map[item.coord.y][item.coord.x]=1;
 										}
 									});
@@ -841,7 +842,7 @@
 									this.status = 1;
 								}
 							}
-							//是否转变方向
+							
 							if(this.vector.change){
 								this.coord.x = this.vector.x;
 								this.coord.y = this.vector.y;
@@ -849,7 +850,7 @@
 								this.x = pos.x;
 								this.y = pos.y;
 							}
-							//方向判定
+							
 							if(this.vector.x>this.coord.x){
 								this.orientation = 0;
 							}else if(this.vector.x<this.coord.x){
@@ -912,7 +913,7 @@
 				});
 			}
 			items = stage.getItemsByType(2);
-			//主角
+
 			player = stage.createItem({
 				width:30,
 				height:30,
@@ -940,12 +941,12 @@
 							this.y -= map.size*(map.y_length-1)*_SIN[this.orientation];
 						}
 					}else{
-						if(!beans.get(this.coord.x,this.coord.y)){	//吃豆
+						if(!beans.get(this.coord.x,this.coord.y)){	
 							_SCORE++;
 							beans.set(this.coord.x,this.coord.y,1);
-							if(config['goods'][this.coord.x+','+this.coord.y]){	//吃到能量豆
+							if(config['goods'][this.coord.x+','+this.coord.y]){	
 								items.forEach(function(item){
-									if(item.status==1||item.status==3){	//如果NPC为正常状态，则置为临时状态
+									if(item.status==1||item.status==3){	
 										item.timeout = 450;
 										item.status = 3;
 									}
@@ -959,13 +960,13 @@
 				draw:function(context){
 					context.fillStyle = '#FFE600';
 					context.beginPath();
-					if(stage.status!=3){	//玩家正常状态
+					if(stage.status!=3){	
 						if(this.times%2){
 							context.arc(this.x,this.y,this.width/2,(.5*this.orientation+.20)*Math.PI,(.5*this.orientation-.20)*Math.PI,false);
 						}else{
 							context.arc(this.x,this.y,this.width/2,(.5*this.orientation+.01)*Math.PI,(.5*this.orientation-.01)*Math.PI,false);
 						}
-					}else{	//玩家被吃
+					}else{	
 						if(stage.timeout) {
 							context.arc(this.x,this.y,this.width/2,(.5*this.orientation+1-.02*stage.timeout)*Math.PI,(.5*this.orientation-1+.02*stage.timeout)*Math.PI,false);
 						}
@@ -975,33 +976,33 @@
 					context.fill();
 				}
 			});
-			//事件绑定
+
 			stage.bind('keydown',function(e){
 				switch(e.keyCode){
-					case 13: //回车
-					case 32: //空格
+					case 13: 
+					case 32: 
 					this.status = this.status==2?1:2;
 					break;
-					case 39: //右
+					case 39: 
 					player.control = {orientation:0};
 					break;
-					case 40: //下
+					case 40:
 					player.control = {orientation:1};
 					break;
-					case 37: //左
+					case 37: 
 					player.control = {orientation:2};
 					break;
-					case 38: //上
+					case 38: 
 					player.control = {orientation:3};
 					break;
 				}
 			});
 		});
 	})();
-	//结束画面
+
 	(function(){
 		var stage = game.createStage();
-		//游戏结束
+		
 		stage.createItem({
 			x:game.width/2,
 			y:game.height*.35,
@@ -1013,7 +1014,7 @@
 				context.fillText(_LIFE?'YOU WIN!':'GAME OVER',this.x,this.y);
 			}
 		});
-		//记分
+		
 		stage.createItem({
 			x:game.width/2,
 			y:game.height*.5,
@@ -1025,11 +1026,11 @@
 				context.fillText('FINAL SCORE: '+(_SCORE+50*Math.max(_LIFE-1,0)),this.x,this.y);
 			}
 		});
-		//事件绑定
+
 		stage.bind('keydown',function(e){
 			switch(e.keyCode){
-				case 13: //回车
-				case 32: //空格
+				case 13: 
+				case 32: 
 				_SCORE = 0;
 				_LIFE = 5;
 				game.setStage(1);
