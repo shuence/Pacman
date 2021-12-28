@@ -1,7 +1,4 @@
 'use strict';
-/*
-* 小型游戏引擎
-*/
 
 // requestAnimationFrame polyfill
 if (!Date.now)
@@ -156,17 +153,17 @@ function Game(id,params){
         var result = [];
         var y_length  = options.map.length;
         var x_length = options.map[0].length;
-        var steps = [];     //步骤的映射
+        var steps = [];     
         for(var y=y_length;y--;){
             steps[y] = new Array(x_length).fill(0);
         }
-        var _getValue = function(x,y){  //获取地图上的值
+        var _getValue = function(x,y){  
             if(options.map[y]&&typeof options.map[y][x]!='undefined'){
                 return options.map[y][x];
             }
             return -1;
         };
-        var _next = function(to){ //判定是否可走,可走放入列表
+        var _next = function(to){ 
             var value = _getValue(to.x,to.y);
             if(value<1){
                 if(value==-1){
@@ -179,11 +176,11 @@ function Game(id,params){
                 }
             }
         };
-        var _render = function(list){//找线路
+        var _render = function(list){
             var new_list = [];
             var next = function(from,to){
                 var value = _getValue(to.x,to.y);
-                if(value<1){	//当前点是否可以走
+                if(value<1){	
                     if(value==-1){
                         to.x = (to.x+x_length)%x_length;
                         to.y = (to.y+y_length)%y_length;
@@ -225,35 +222,31 @@ function Game(id,params){
         }
         return result;
     };
-    //布景对象构造器
+
     var Stage = function(params){
         this._params = params||{};
         this._settings = {
-            index:0,                        //布景索引
-            status:0,						//布景状态,0表示未激活/结束,1表示正常,2表示暂停,3表示临时状态
-            maps:[],						//地图队列
-            audio:[],						//音频资源
-            images:[],						//图片资源
-            items:[],						//对象队列
-            timeout:0,						//倒计时(用于过程动画状态判断)
-            update:function(){}				//嗅探,处理布局下不同对象的相对关系
+            index:0,                        
+            status:0,						
+            maps:[],						
+            audio:[],						
+            images:[],						
+            items:[],						
+            timeout:0,						
+            update:function(){}				
         };
         Object.assign(this,this._settings,this._params);
     };
-    //添加对象
     Stage.prototype.createItem = function(options){
         var item = new Item(options);
-        //动态属性
         if(item.location){
             Object.assign(item,item.location.coord2position(item.coord.x,item.coord.y));
         }
-        //关系绑定
         item._stage = this;
         item._id = this.items.length;
         this.items.push(item);
         return item;
     };
-    //重置物体位置
     Stage.prototype.resetItems = function(){
         this.status = 1;
         this.items.forEach(function(item,index){
@@ -263,27 +256,24 @@ function Game(id,params){
             }
         });
     };
-    //获取对象列表
     Stage.prototype.getItemsByType = function(type){
         return this.items.filter(function(item){
 	    return item.type == type;
         });
     };
-    //添加地图
+
     Stage.prototype.createMap = function(options){
         var map = new Map(options);
-        //动态属性
         map.data = JSON.parse(JSON.stringify(map._params.data));
         map.y_length = map.data.length;
         map.x_length = map.data[0].length;
         map.imageData = null;
-        //关系绑定
         map._stage = this;
         map._id = this.maps.length;
         this.maps.push(map);
         return map;
     };
-    //重置地图
+    
     Stage.prototype.resetMaps = function(){
         this.status = 1;
         this.maps.forEach(function(map){
@@ -294,13 +284,12 @@ function Game(id,params){
             map.imageData = null;
         });
     };
-    //重置
+    
     Stage.prototype.reset = function(){
         Object.assign(this,this._settings,this._params);
         this.resetItems();
         this.resetMaps();
     };
-    //绑定事件
     Stage.prototype.bind = function(eventType,callback){
         if(!_events[eventType]){
             _events[eventType] = {};
@@ -312,24 +301,24 @@ function Game(id,params){
                 e.preventDefault();
             });
         }
-        _events[eventType]['s'+this.index] = callback.bind(this);	//绑定事件作用域
+        _events[eventType]['s'+this.index] = callback.bind(this);	
     };
-    //动画开始
+
     this.start = function() {
-        var f = 0;		//帧数计算
+        var f = 0;		
         var fn = function(){
             var stage = _stages[_index];
-            _context.clearRect(0,0,_.width,_.height);		//清除画布
+            _context.clearRect(0,0,_.width,_.height);		
             _context.fillStyle = '#000000';
             _context.fillRect(0,0,_.width,_.height);
             f++;
             if(stage.timeout){
                 stage.timeout--;
             }
-            if(stage.update()!=false){		            //update返回false,则不绘制
+            if(stage.update()!=false){		            
                 stage.maps.forEach(function(map){
                     if(!(f%map.frames)){
-                        map.times = f/map.frames;		//计数器
+                        map.times = f/map.frames;		
                     }
                     if(map.cache){
                         if(!map.imageData){
@@ -347,9 +336,9 @@ function Game(id,params){
                 });
                 stage.items.forEach(function(item){
                     if(!(f%item.frames)){
-                        item.times = f/item.frames;		   //计数器
+                        item.times = f/item.frames;		   
                     }
-                    if(stage.status==1&&item.status!=2){  	//对象及布景状态都不处于暂停状态
+                    if(stage.status==1&&item.status!=2){  	
                         if(item.location){
                             item.coord = item.location.position2coord(item.x,item.y);
                         }
@@ -365,11 +354,11 @@ function Game(id,params){
         };
         _hander = requestAnimationFrame(fn);
     };
-    //动画结束
+
     this.stop = function(){
         _hander&&cancelAnimationFrame(_hander);
     };
-    //事件坐标
+    
     this.getPosition = function(e){
         var box = $canvas.getBoundingClientRect();
         return {
@@ -377,22 +366,22 @@ function Game(id,params){
             y:e.clientY-box.top*(_.height/box.height)
         };
     }
-    //创建布景
+
     this.createStage = function(options){
         var stage = new Stage(options);
         stage.index = _stages.length;
         _stages.push(stage);
         return stage;
     };
-    //指定布景
+    
     this.setStage = function(index){
         _stages[_index].status = 0;
         _index = index;
         _stages[_index].status = 1;
-        _stages[_index].reset(); //重置
+        _stages[_index].reset(); 
         return _stages[_index];
     };
-    //下个布景
+
     this.nextStage = function(){
         if(_index<_stages.length-1){
             return this.setStage(++_index);
@@ -400,11 +389,11 @@ function Game(id,params){
             throw new Error('unfound new stage.');
         }
     };
-    //获取布景列表
+    
     this.getStages = function(){
         return _stages;
     };
-    //初始化游戏引擎
+
     this.init = function(){
         _index = 0;
         this.start();
